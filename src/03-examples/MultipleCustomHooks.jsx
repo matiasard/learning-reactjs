@@ -47,10 +47,6 @@ export const MultipleCustomHooks = () => {
 				</div>
 			</div>
 
-			{/* {isLoading && (
-				<div className="alert alert-info text-center h4">Loading...</div>
-			)} */}
-
 			{isLoading ? (
 				<Loading />
 			) : (

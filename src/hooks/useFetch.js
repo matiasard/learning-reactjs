@@ -3,14 +3,13 @@ import { useEffect, useState } from "react";
 
 export const useFetch = (url) => {
 	// const url = "https://quotes-by-api-ninjas.p.rapidapi.com/v1/quotes"
-
 	const [state, setState] = useState({
 		data: null,
 		isLoading: true,
 		hasError: null,
 	});
 
-	const getFetch = async () => {
+	const getFetch = async (category = "") => {
 		setState({ ...state, isLoading: true });
 
 		const options = {
@@ -20,19 +19,23 @@ export const useFetch = (url) => {
 				"X-RapidAPI-Host": "quotes-by-api-ninjas.p.rapidapi.com",
 			},
 		};
-		const resp = await fetch(url, options);
+		//? Si parametro Category no es vacio....
+		// True/False && True
+		!!category && (options.params = { category });
+		const urlClean = !!category ? `${url}?category=${category}` : url;
+		const resp = await fetch(urlClean, options);
 		const data = await resp.json(resp);
-
 		setState({ ...state, data, isLoading: false });
 	};
 
 	useEffect(() => {
 		getFetch();
-	}, [url]);
+	}, []);
 
 	return {
 		data: state.data,
 		isLoading: state.isLoading,
 		hasError: state.hasError,
+		getFetch,
 	};
 };

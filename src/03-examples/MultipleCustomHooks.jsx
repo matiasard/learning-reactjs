@@ -1,50 +1,47 @@
 import { useFetch } from "../hooks";
-import { Loading, Quotes } from "./index";
+import { Loading, Quotes, QuoteCategory } from "./index";
 
 export const MultipleCustomHooks = () => {
 	const url = "https://quotes-by-api-ninjas.p.rapidapi.com/v1/quotes";
 
 	const { data, isLoading, hasError, getFetch } = useFetch(url);
-	// ->                              False/True && True
+	// --->                            False/True && True
 	const { author, quote, category } = !!data && data[0];
+	const categories = [
+		"art",
+		"money",
+		"birthday",
+		"change",
+		"computers",
+		"experience",
+		"fitness",
+		"family",
+		"humor",
+	];
 
-	const onNewQoute = () => {
+	const onNewQuote = () => {
 		getFetch();
 	};
 
 	return (
 		<>
-			<h1>MultipleCustomHooks</h1>
+			<h1 className="mt-4">MultipleCustomHooks</h1>
 			<hr />
-			<div className="mb-4 row gx-2">
+
+			<div className="mb-4 row g-2">
 				<h2 className="h3 col-auto">Category:</h2>
-				<div className="col-auto">
-					<button
-						onClick={() => getFetch("art")}
-						disabled={isLoading}
-						className="btn btn-primary "
-					>
-						Art
-					</button>
-				</div>
-				<div className="col-auto">
-					<button
-						onClick={() => getFetch("money")}
-						disabled={isLoading}
-						className="btn btn-primary col"
-					>
-						Money
-					</button>
-				</div>
-				<div className="col-auto">
-					<button
-						onClick={() => getFetch("birthday")}
-						disabled={isLoading}
-						className="btn btn-primary col"
-					>
-						Birthday
-					</button>
-				</div>
+
+				{categories.map((categ) => {
+					return (
+						<div className="col-auto" key={categ}>
+							<QuoteCategory
+								category={categ}
+								isLoading={isLoading}
+								getFetch={getFetch}
+							/>
+						</div>
+					);
+				})}
 			</div>
 
 			{isLoading ? (
@@ -54,11 +51,11 @@ export const MultipleCustomHooks = () => {
 			)}
 
 			<button
-				onClick={onNewQoute}
+				onClick={onNewQuote}
 				disabled={isLoading}
 				className="btn btn-primary"
 			>
-				Next Qoute
+				Random Quote
 			</button>
 		</>
 	);
